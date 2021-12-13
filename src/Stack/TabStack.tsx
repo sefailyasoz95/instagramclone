@@ -1,6 +1,7 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+/* eslint-disable react-native/no-inline-styles */
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import ExploreStack from './ExploreStack';
 import HomeStack from './HomeStack';
 import ProfileStack from './ProfileStack';
@@ -13,19 +14,20 @@ import ShopStack from './ShopStack';
 
 interface Props {}
 const Tab = createBottomTabNavigator();
-const TabStack = (props: Props) => {
+const TabStack = () => {
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: {backgroundColor: '#040404'},
-      }}>
+        tabBarStyle: { backgroundColor: '#040404' },
+      }}
+    >
       <Tab.Screen
         name="HomeStack"
         component={HomeStack}
-        options={({route}) => ({
-          tabBarIcon: ({focused}) => (
+        options={({}) => ({
+          tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? 'home' : 'home-outline'}
               size={20}
@@ -38,8 +40,8 @@ const TabStack = (props: Props) => {
       <Tab.Screen
         name="ExploreStack"
         component={ExploreStack}
-        options={({route}) => ({
-          tabBarIcon: ({focused}) => (
+        options={({}) => ({
+          tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? 'md-search-sharp' : 'md-search-outline'}
               size={20}
@@ -51,8 +53,8 @@ const TabStack = (props: Props) => {
       <Tab.Screen
         name="ReelsStack"
         component={ReelsStack}
-        options={({route}) => ({
-          tabBarIcon: ({focused}) => (
+        options={({}) => ({
+          tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
               name={focused ? 'movie' : 'movie-open-outline'}
               size={20}
@@ -64,8 +66,8 @@ const TabStack = (props: Props) => {
       <Tab.Screen
         name="ShopStack"
         component={ShopStack}
-        options={({route}) => ({
-          tabBarIcon: ({focused}) =>
+        options={({}) => ({
+          tabBarIcon: ({ focused }) =>
             focused ? (
               <Entypo
                 name={'shopping-bag'}
@@ -84,8 +86,8 @@ const TabStack = (props: Props) => {
       <Tab.Screen
         name="ProfileStack"
         component={ProfileStack}
-        options={({route}) => ({
-          tabBarIcon: ({focused}) => (
+        options={({}) => ({
+          tabBarIcon: ({ focused }) => (
             <Image
               source={require('../Assets/Images/profile-img.jpeg')}
               width={10}
@@ -93,7 +95,7 @@ const TabStack = (props: Props) => {
               style={{
                 width: 25,
                 height: 25,
-                borderRadius: 50,
+                borderRadius: 100,
                 resizeMode: 'contain',
                 borderWidth: 1,
                 borderColor: focused ? 'red' : 'transparent',
@@ -108,4 +110,4 @@ const TabStack = (props: Props) => {
 
 export default TabStack;
 
-const styles = StyleSheet.create({});
+// const styles = StyleSheet.create({});

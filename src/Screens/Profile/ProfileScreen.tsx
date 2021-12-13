@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Image,
   Keyboard,
@@ -14,14 +14,15 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {data} from '../../Helpers/data';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {AuthStackParamList} from '../../StackParamLists/AuthStackParamList';
-import {SharedElement} from 'react-navigation-shared-element';
+import { data } from '../../Helpers/data';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AuthStackParamList } from '../../StackParamLists/AuthStackParamList';
+import { SharedElement } from 'react-navigation-shared-element';
 import Input from '../../Components/Input/Input';
 import Button from '../../Components/Button/Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
+import ProfileMaterialTabStack from '../../Stack/ProfileMaterialTabStack';
 type Props = {
   navigation: NativeStackNavigationProp<AuthStackParamList, 'Profile'>;
   // route: RouteProp<AppStackParamList, >;
@@ -32,7 +33,7 @@ const newData = {
     'https://pbs.twimg.com/profile_images/1356333120992149505/-qvakEK7_400x400.jpg',
   name: 'Sefa İlyas Öz',
 };
-const ProfileScreen = ({navigation}: Props) => {
+const ProfileScreen = ({ navigation }: Props) => {
   const [screenStates, setScreenStates] = useState({
     autoPlay: true,
     loop: false,
@@ -68,35 +69,35 @@ const ProfileScreen = ({navigation}: Props) => {
   });
   const animatedHeader = useAnimatedStyle(() => {
     return {
-      top: withTiming(top.value, {duration: 750, easing: Easing.bounce}),
+      top: withTiming(top.value, { duration: 750, easing: Easing.bounce }),
     };
   });
   const animatedEdit = useAnimatedStyle(() => {
     return {
-      right: withTiming(right.value, {duration: 750, easing: Easing.bounce}),
+      right: withTiming(right.value, { duration: 750, easing: Easing.bounce }),
     };
   });
 
   const handleUserContainer = () => {
-    setScreenStates({...screenStates, showUser: true});
+    setScreenStates({ ...screenStates, showUser: true });
     (scale.value = withTiming(1, {
       duration: 750,
       easing: Easing.out(Easing.exp),
     })),
-      (opacity.value = withTiming(1, {duration: 500}));
+      (opacity.value = withTiming(1, { duration: 500 }));
     top.value = 50;
     right.value = 20;
   };
   const toggleOverlay = () => {
     if (createProfile) {
-      overlayOpacitiy.value = withTiming(0, {duration: 500});
-      overlayBottom.value = withTiming(200, {duration: 750});
+      overlayOpacitiy.value = withTiming(0, { duration: 500 });
+      overlayBottom.value = withTiming(200, { duration: 750 });
       setTimeout(() => {
         setCreateProfile(false);
       }, 800);
     } else {
-      overlayBottom.value = withTiming(0, {duration: 750});
-      overlayOpacitiy.value = withTiming(1, {duration: 500});
+      overlayBottom.value = withTiming(0, { duration: 750 });
+      overlayOpacitiy.value = withTiming(1, { duration: 500 });
       setCreateProfile(true);
       // inputRef.current?.focus()
     }
@@ -112,20 +113,20 @@ const ProfileScreen = ({navigation}: Props) => {
         <View style={styles.profileInfo}>
           <View style={styles.topHeader}>
             <View style={styles.topHeaderLeft}>
-              <Ionicons
+              {/* <Ionicons
                 name="ios-lock-closed-outline"
                 size={20}
                 color={'white'}
-              />
-              <Text style={styles.name}>sefailyasoz</Text>
+              /> */}
+              <Text style={styles.name}>ifbbbro_sefa</Text>
             </View>
             <View style={styles.topHeaderRight}>
               <TouchableOpacity>
                 <Feather
                   name="plus-square"
-                  size={22}
+                  size={25}
                   color={'white'}
-                  style={{margin: 5}}
+                  style={{ margin: 5 }}
                 />
               </TouchableOpacity>
               <TouchableOpacity>
@@ -133,7 +134,7 @@ const ProfileScreen = ({navigation}: Props) => {
                   name="menu"
                   size={22}
                   color={'white'}
-                  style={{margin: 5}}
+                  style={{ margin: 5 }}
                 />
               </TouchableOpacity>
             </View>
@@ -153,7 +154,7 @@ const ProfileScreen = ({navigation}: Props) => {
             </View>
             <View style={styles.numbers}>
               <TouchableOpacity style={styles.number}>
-                <Text style={styles.numberDigits}>86</Text>
+                <Text style={styles.numberDigits}>105</Text>
                 <Text style={styles.numberText}>Posts</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.number}>
@@ -161,18 +162,20 @@ const ProfileScreen = ({navigation}: Props) => {
                 <Text style={styles.numberText}>Followers</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.number}>
-                <Text style={styles.numberDigits}>254</Text>
+                <Text style={styles.numberDigits}>223</Text>
                 <Text style={styles.numberText}>Following</Text>
               </TouchableOpacity>
             </View>
           </View>
           <View style={styles.about}>
-            <Text style={styles.aboutText}>📍 Sefa İlyas Öz</Text>
+            <Text style={styles.aboutText}>Fit Engineer 🐺 </Text>
+            <Text style={{ color: 'rgba(200,200,200,0.7)' }}>Athlete</Text>
+            <Text style={styles.aboutText}>🏋 Fitness | Cars | Music </Text>
             <Text style={styles.aboutText}>💻 Software Developer</Text>
-            <Text style={styles.aboutLink}>🏋 @ifbbro_sefa</Text>
+            <Text style={styles.aboutText}>📍 Istanbul, Turkey</Text>
             <Text style={styles.aboutText}>
               {' '}
-              ▶ {` `}YouTube.coom/sefailyasoz
+              ▶ {` `}YouTube.com/sefailyasoz
             </Text>
             <Text style={styles.aboutLink}>sefailyasoz.netlify.app/</Text>
           </View>
@@ -183,20 +186,50 @@ const ProfileScreen = ({navigation}: Props) => {
               color="gray"
               textColor="white"
               corners="curved"
-              buttonStyle={{width: '85%'}}
+              size="xlarge"
+              buttonStyle={{
+                borderRadius: 5,
+              }}
             />
-            <TouchableOpacity
-              style={{
-                borderRadius: 10,
-                borderColor: 'gray',
-                borderWidth: 1,
-                padding: 5,
-              }}>
-              <Ionicons name="chevron-down" size={22} color={'white'} />
-            </TouchableOpacity>
+            <View style={styles.buttons}>
+              <Button
+                text="Ad Tools"
+                onPress={() => {}}
+                color="gray"
+                textColor="white"
+                buttonStyle={{
+                  marginHorizontal: 2,
+                  width: '30%',
+                  borderRadius: 5,
+                }}
+              />
+              <Button
+                text="Insights"
+                onPress={() => {}}
+                color="gray"
+                textColor="white"
+                buttonStyle={{
+                  marginHorizontal: 2,
+                  width: '30%',
+                  borderRadius: 5,
+                }}
+              />
+              <Button
+                text="Email"
+                onPress={() => {}}
+                color="gray"
+                textColor="white"
+                buttonStyle={{
+                  marginHorizontal: 2,
+                  width: '30%',
+                  borderRadius: 5,
+                }}
+              />
+            </View>
           </View>
         </View>
       </View>
+      <ProfileMaterialTabStack />
     </SafeAreaView>
   );
 };
@@ -205,7 +238,6 @@ export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#040404',
     alignItems: 'center',
     width: '98%',
@@ -215,9 +247,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   editButton: {
+    alignItems: 'center',
+  },
+  buttons: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
   },
   about: {
     marginLeft: 5,
