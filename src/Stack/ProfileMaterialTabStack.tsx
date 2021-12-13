@@ -5,8 +5,6 @@ import PostsScreen from '../Screens/Profile/TopBar/PostsScreen';
 import VideosScreen from '../Screens/Profile/TopBar/VideosScreen';
 import MyReelsScreen from '../Screens/Profile/TopBar/MyReelsScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
-import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -19,6 +17,11 @@ const ProfileMaterialTabStack = () => {
           backgroundColor: 'transparent',
         },
         tabBarShowLabel: false,
+        tabBarIndicatorStyle: {
+          borderColor: 'red',
+          borderWidth: 1,
+          borderStyle: 'solid',
+        },
       }}
     >
       <ProfileMaterialTab.Screen

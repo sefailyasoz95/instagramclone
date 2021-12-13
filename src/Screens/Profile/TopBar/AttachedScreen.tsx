@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#040404',
     alignItems: 'center',
-    width: '98%',
+    width: '100%',
     // borderWidth: 1,
     // borderStyle: 'solid',
     // borderColor: 'white',

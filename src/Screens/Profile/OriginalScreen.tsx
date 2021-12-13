@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import {
   Image,
-  ImageBackground,
   Keyboard,
   SafeAreaView,
   StyleSheet,
@@ -24,7 +23,6 @@ import Button from '../../Components/Button/Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import ProfileMaterialTabStack from '../../Stack/ProfileMaterialTabStack';
-
 type Props = {
   navigation: NativeStackNavigationProp<AuthStackParamList, 'Profile'>;
   // route: RouteProp<AppStackParamList, >;
@@ -35,7 +33,7 @@ const newData = {
     'https://pbs.twimg.com/profile_images/1356333120992149505/-qvakEK7_400x400.jpg',
   name: 'Sefa İlyas Öz',
 };
-const ProfileScreen = ({ navigation }: Props) => {
+const OriginalScreen = ({ navigation }: Props) => {
   const [screenStates, setScreenStates] = useState({
     autoPlay: true,
     loop: false,
@@ -110,14 +108,8 @@ const ProfileScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <View style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <ImageBackground
-          source={require('../../Assets/Images/profile-img.jpeg')}
-          width={50}
-          height={50}
-          style={styles.profileImage}
-        />
         <View style={styles.profileInfo}>
           <View style={styles.topHeader}>
             <View style={styles.topHeaderLeft}>
@@ -147,8 +139,19 @@ const ProfileScreen = ({ navigation }: Props) => {
               </TouchableOpacity>
             </View>
           </View>
-
           <View style={styles.imgAndNumbers}>
+            <View style={styles.image}>
+              <Image
+                source={require('../../Assets/Images/profile-img.jpeg')}
+                width={50}
+                height={50}
+                style={{
+                  width: 75,
+                  height: 75,
+                  borderRadius: 50,
+                }}
+              />
+            </View>
             <View style={styles.numbers}>
               <TouchableOpacity style={styles.number}>
                 <Text style={styles.numberDigits}>105</Text>
@@ -227,11 +230,11 @@ const ProfileScreen = ({ navigation }: Props) => {
         </View>
       </View>
       <ProfileMaterialTabStack />
-    </View>
+    </SafeAreaView>
   );
 };
 
-export default ProfileScreen;
+export default OriginalScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -309,7 +312,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#040404',
   },
   profileInfo: {
-    marginTop: '10%',
+    marginTop: 5,
     width: '100%',
   },
   imgAndNumbers: {
@@ -318,8 +321,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 85,
+    height: 85,
     borderRadius: 50,
     margin: 5,
     borderWidth: 1,
@@ -333,11 +336,5 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     letterSpacing: 1,
     fontSize: 17,
-  },
-  profileImage: {
-    zIndex: -10,
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
   },
 });
