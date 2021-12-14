@@ -1,39 +1,37 @@
 import React, { useRef, useState } from 'react';
-import {
-  Image,
-  ImageBackground,
-  Keyboard,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Image, ImageBackground, StyleSheet, View } from 'react-native';
 import Animated, {
   Easing,
+  runOnJS,
+  useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
+  withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import { data } from '../../Helpers/data';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../StackParamLists/AuthStackParamList';
-import { SharedElement } from 'react-navigation-shared-element';
-import Input from '../../Components/Input/Input';
-import Button from '../../Components/Button/Button';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
 import ProfileMaterialTabStack from '../../Stack/ProfileMaterialTabStack';
+import Header from '../../Components/Profile/Header';
+import NumberContainer from '../../Components/Profile/NumberContainer';
+import About from '../../Components/Profile/About';
+import ButtonSection from '../../Components/Profile/ButtonSection';
+import {
+  PanGestureHandler,
+  PanGestureHandlerGestureEvent,
+} from 'react-native-gesture-handler';
+import { SPRING_CONFIG } from '../../Constants/SPRING_CONFIG';
 
 type Props = {
   navigation: NativeStackNavigationProp<AuthStackParamList, 'Profile'>;
   // route: RouteProp<AppStackParamList, >;
 };
-const newData = {
-  id: 5,
-  image:
-    'https://pbs.twimg.com/profile_images/1356333120992149505/-qvakEK7_400x400.jpg',
-  name: 'Sefa İlyas Öz',
+
+type AnimatedGHContext = {
+  startTop: number;
+  scale: number;
+  x: number;
+  y: number;
 };
 const ProfileScreen = ({ navigation }: Props) => {
   const [screenStates, setScreenStates] = useState({
@@ -42,190 +40,73 @@ const ProfileScreen = ({ navigation }: Props) => {
     showUser: false,
     loading: false,
   });
-  const [createProfile, setCreateProfile] = useState(false);
-  const opacity = useSharedValue(0);
-  const scale = useSharedValue(0);
   const top = useSharedValue(0);
-  const right = useSharedValue(0);
-  const overlayBottom = useSharedValue(200);
-  const overlayOpacitiy = useSharedValue(0);
+  const scale = useSharedValue(1);
+  const x = useSharedValue(0);
+  const y = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => {
     return {
+      //   top: withSpring(top.value, SPRING_CONFIG),
       transform: [
-        {
-          scale: scale.value,
-        },
+        { translateX: withSpring(x.value, SPRING_CONFIG) },
+        { translateY: withSpring(y.value, SPRING_CONFIG) },
       ],
-      opacity: opacity.value,
     };
   });
-  const overlayAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateY: overlayBottom.value,
-        },
-      ],
-      opacity: overlayOpacitiy.value,
-    };
-  });
-  const animatedHeader = useAnimatedStyle(() => {
+  const animatedImageStyle = useAnimatedStyle(() => {
     return {
       top: withTiming(top.value, { duration: 750, easing: Easing.bounce }),
     };
   });
-  const animatedEdit = useAnimatedStyle(() => {
-    return {
-      right: withTiming(right.value, { duration: 750, easing: Easing.bounce }),
-    };
+
+  const gestureHandler = useAnimatedGestureHandler<
+    PanGestureHandlerGestureEvent,
+    AnimatedGHContext
+  >({
+    onStart(_, context) {
+      context.startTop = top.value;
+      (context.x = 0), (context.y = y.value);
+    },
+    onActive({ translationX, translationY }, context) {
+      //   top.value = context.startTop + translationY;
+      scale.value = 0.95;
+      // x.value = context.x + translationX;
+      y.value = context.y + translationY;
+    },
+    onEnd() {
+      if (y.value < 150) {
+        // top.value = 0;
+        // scale.value = 1;
+        // x.value = 0;
+        // y.value = 0;
+      } else {
+        // top.value = 0;
+        // runOnJS(navigation.goBack)();
+        console.log('else: ');
+      }
+    },
   });
-
-  const handleUserContainer = () => {
-    setScreenStates({ ...screenStates, showUser: true });
-    (scale.value = withTiming(1, {
-      duration: 750,
-      easing: Easing.out(Easing.exp),
-    })),
-      (opacity.value = withTiming(1, { duration: 500 }));
-    top.value = 50;
-    right.value = 20;
-  };
-  const toggleOverlay = () => {
-    if (createProfile) {
-      overlayOpacitiy.value = withTiming(0, { duration: 500 });
-      overlayBottom.value = withTiming(200, { duration: 750 });
-      setTimeout(() => {
-        setCreateProfile(false);
-      }, 800);
-    } else {
-      overlayBottom.value = withTiming(0, { duration: 750 });
-      overlayOpacitiy.value = withTiming(1, { duration: 500 });
-      setCreateProfile(true);
-      // inputRef.current?.focus()
-    }
-  };
-  const handleSave = () => {
-    data.push(newData);
-    toggleOverlay();
-  };
-
+  // profile-img.jpeg
+  // netflix-logo.jpeg
+  // newProfileImage.jpg
   return (
     <View style={styles.safeArea}>
-      <View style={styles.container}>
-        <ImageBackground
-          source={require('../../Assets/Images/profile-img.jpeg')}
-          width={50}
-          height={50}
-          style={styles.profileImage}
-        />
-        <View style={styles.profileInfo}>
-          <View style={styles.topHeader}>
-            <View style={styles.topHeaderLeft}>
-              {/* <Ionicons
-                name="ios-lock-closed-outline"
-                size={20}
-                color={'white'}
-              /> */}
-              <Text style={styles.name}>ifbbbro_sefa</Text>
-            </View>
-            <View style={styles.topHeaderRight}>
-              <TouchableOpacity>
-                <Feather
-                  name="plus-square"
-                  size={25}
-                  color={'white'}
-                  style={{ margin: 5 }}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Ionicons
-                  name="menu"
-                  size={22}
-                  color={'white'}
-                  style={{ margin: 5 }}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={styles.imgAndNumbers}>
-            <View style={styles.numbers}>
-              <TouchableOpacity style={styles.number}>
-                <Text style={styles.numberDigits}>105</Text>
-                <Text style={styles.numberText}>Posts</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.number}>
-                <Text style={styles.numberDigits}>10M</Text>
-                <Text style={styles.numberText}>Followers</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.number}>
-                <Text style={styles.numberDigits}>223</Text>
-                <Text style={styles.numberText}>Following</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.about}>
-            <Text style={styles.aboutText}>Fit Engineer 🐺 </Text>
-            <Text style={{ color: 'rgba(200,200,200,0.7)' }}>Athlete</Text>
-            <Text style={styles.aboutText}>🏋 Fitness | Cars | Music </Text>
-            <Text style={styles.aboutText}>💻 Software Developer</Text>
-            <Text style={styles.aboutText}>📍 Istanbul, Turkey</Text>
-            <Text style={styles.aboutText}>
-              {' '}
-              ▶ {` `}YouTube.com/sefailyasoz
-            </Text>
-            <Text style={styles.aboutLink}>sefailyasoz.netlify.app/</Text>
-          </View>
-          <View style={styles.editButton}>
-            <Button
-              text="Edit Profile"
-              onPress={() => {}}
-              color="gray"
-              textColor="white"
-              corners="curved"
-              size="xlarge"
-              buttonStyle={{
-                borderRadius: 5,
-              }}
+      <PanGestureHandler onGestureEvent={gestureHandler}>
+        <Animated.View style={[styles.container, animatedStyle]}>
+          <View style={styles.profileInfo}>
+            <Image
+              source={require('../../Assets/Images/profile-img.jpeg')}
+              width={50}
+              height={50}
+              style={[styles.profileImage]}
             />
-            <View style={styles.buttons}>
-              <Button
-                text="Ad Tools"
-                onPress={() => {}}
-                color="gray"
-                textColor="white"
-                buttonStyle={{
-                  marginHorizontal: 2,
-                  width: '30%',
-                  borderRadius: 5,
-                }}
-              />
-              <Button
-                text="Insights"
-                onPress={() => {}}
-                color="gray"
-                textColor="white"
-                buttonStyle={{
-                  marginHorizontal: 2,
-                  width: '30%',
-                  borderRadius: 5,
-                }}
-              />
-              <Button
-                text="Email"
-                onPress={() => {}}
-                color="gray"
-                textColor="white"
-                buttonStyle={{
-                  marginHorizontal: 2,
-                  width: '30%',
-                  borderRadius: 5,
-                }}
-              />
-            </View>
+            <Header />
+            <NumberContainer />
+            <About />
+            <ButtonSection />
           </View>
-        </View>
-      </View>
+        </Animated.View>
+      </PanGestureHandler>
       <ProfileMaterialTabStack />
     </View>
   );
@@ -235,109 +116,23 @@ export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#040404',
-    alignItems: 'center',
-    width: '98%',
-    // borderWidth: 1,
-    // borderStyle: 'solid',
-    // borderColor: 'white',
-    alignSelf: 'center',
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: 'white',
   },
-  editButton: {
-    alignItems: 'center',
-  },
-  buttons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  about: {
-    marginLeft: 5,
-  },
-  aboutText: {
-    alignItems: 'center',
-    fontSize: 14,
-    color: 'white',
-    marginVertical: 1,
-  },
-  aboutLink: {
-    alignItems: 'center',
-    fontSize: 14,
-    color: 'lightblue',
-  },
-  topHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  topHeaderLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 5,
-  },
-  topHeaderRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 5,
-  },
-  numbers: {
-    // borderWidth: 1,
-    // borderStyle: 'solid',
-    // borderColor: 'purple',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
-  },
-  numberDigits: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: '#fff',
-  },
-  numberText: {
-    fontSize: 14,
-    color: '#fff',
-  },
-  number: {
-    padding: 10,
-    alignItems: 'center',
-  },
+
   safeArea: {
     flex: 1,
     backgroundColor: '#040404',
   },
   profileInfo: {
-    marginTop: '10%',
     width: '100%',
   },
-  imgAndNumbers: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    margin: 5,
-    borderWidth: 1,
-    borderColor: 'gray',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  name: {
-    color: 'white',
-    fontWeight: 'bold',
-    marginLeft: 5,
-    letterSpacing: 1,
-    fontSize: 17,
-  },
   profileImage: {
-    zIndex: -10,
     width: '100%',
     height: '100%',
     position: 'absolute',
+    resizeMode: 'cover',
   },
 });

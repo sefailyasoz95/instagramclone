@@ -14,7 +14,7 @@ const ProfileMaterialTabStack = () => {
     <ProfileMaterialTab.Navigator
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: 'transparent',
+          backgroundColor: 'black',
         },
         tabBarShowLabel: false,
         tabBarIndicatorStyle: {
