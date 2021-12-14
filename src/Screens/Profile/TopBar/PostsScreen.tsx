@@ -23,8 +23,14 @@ const PostsScreen = (props: Props) => {
         backgroundColor: '#040404',
       }}
     >
-      {images.map(() => (
-        <Post />
+      {images.map(i => (
+        <Post
+          source={
+            i % 2 === 1
+              ? require('../../../Assets/Images/gtr.jpg')
+              : require('../../../Assets/Images/profile-img.jpeg')
+          }
+        />
       ))}
     </ScrollView>
   );

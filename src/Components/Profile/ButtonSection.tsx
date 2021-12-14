@@ -16,7 +16,10 @@ const ButtonSection = (props: Props) => {
         size="xlarge"
         buttonStyle={{
           borderRadius: 5,
+          backgroundColor: 'rgba(50,50,50,0.5)',
+          borderWidth: 0,
         }}
+        textStyle={{ fontWeight: 'bold', letterSpacing: 1 }}
       />
       <View style={styles.buttons}>
         <Button
@@ -28,7 +31,11 @@ const ButtonSection = (props: Props) => {
             marginHorizontal: 2,
             width: '30%',
             borderRadius: 5,
+
+            backgroundColor: 'rgba(50,50,50,0.5)',
+            borderWidth: 0,
           }}
+          textStyle={{ fontWeight: 'bold', letterSpacing: 1 }}
         />
         <Button
           text="Insights"
@@ -39,7 +46,11 @@ const ButtonSection = (props: Props) => {
             marginHorizontal: 2,
             width: '30%',
             borderRadius: 5,
+
+            backgroundColor: 'rgba(50,50,50,0.5)',
+            borderWidth: 0,
           }}
+          textStyle={{ fontWeight: 'bold', letterSpacing: 1 }}
         />
         <Button
           text="Email"
@@ -50,7 +61,11 @@ const ButtonSection = (props: Props) => {
             marginHorizontal: 2,
             width: '30%',
             borderRadius: 5,
+
+            backgroundColor: 'rgba(50,50,50,0.5)',
+            borderWidth: 0,
           }}
+          textStyle={{ fontWeight: 'bold', letterSpacing: 1 }}
         />
       </View>
     </View>
