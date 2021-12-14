@@ -10,10 +10,11 @@ const Post = (props: Props) => {
       width={50}
       height={50}
       style={{
-        width: '33.33%',
+        width: '32.5%',
         resizeMode: 'contain',
         borderWidth: 1,
-        height: 138,
+        height: 110,
+        margin: 0.8,
       }}
     />
   );

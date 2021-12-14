@@ -21,6 +21,8 @@ import {
   PanGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
 import { SPRING_CONFIG } from '../../Constants/SPRING_CONFIG';
+import { BlurView } from '@react-native-community/blur';
+import Stories from '../../Components/Profile/Stories';
 
 type Props = {
   navigation: NativeStackNavigationProp<AuthStackParamList, 'Profile'>;
@@ -42,20 +44,19 @@ const ProfileScreen = ({ navigation }: Props) => {
   });
   const top = useSharedValue(0);
   const scale = useSharedValue(1);
+  const opacity = useSharedValue(1);
   const x = useSharedValue(0);
   const y = useSharedValue(0);
+  const mBottom = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => {
     return {
       //   top: withSpring(top.value, SPRING_CONFIG),
       transform: [
         { translateX: withSpring(x.value, SPRING_CONFIG) },
         { translateY: withSpring(y.value, SPRING_CONFIG) },
+        // { scale: scale.value },
       ],
-    };
-  });
-  const animatedImageStyle = useAnimatedStyle(() => {
-    return {
-      top: withTiming(top.value, { duration: 750, easing: Easing.bounce }),
+      marginBottom: mBottom.value,
     };
   });
 
@@ -64,25 +65,58 @@ const ProfileScreen = ({ navigation }: Props) => {
     AnimatedGHContext
   >({
     onStart(_, context) {
-      context.startTop = top.value;
+      // context.startTop = top.value;
       (context.x = 0), (context.y = y.value);
     },
     onActive({ translationX, translationY }, context) {
       //   top.value = context.startTop + translationY;
-      scale.value = 0.95;
       // x.value = context.x + translationX;
-      y.value = context.y + translationY;
-    },
-    onEnd() {
-      if (y.value < 150) {
+      if (y.value > 0) {
         // top.value = 0;
-        // scale.value = 1;
         // x.value = 0;
         // y.value = 0;
+        console.log('pulling down: ', translationY);
+        mBottom.value = 0;
+        opacity.value = 1;
+        if (translationY > 30) {
+          scale.value = withTiming(2);
+        }
+        if (translationY > 60) {
+          scale.value = withTiming(3);
+        }
       } else {
         // top.value = 0;
         // runOnJS(navigation.goBack)();
-        console.log('else: ');
+        console.log('pulling up: ', Math.abs(context.y + translationY));
+        // if (Math.abs(context.y + translationY) > 10) {
+        //   opacity.value = withTiming(0.9);
+        // }
+        // if (Math.abs(context.y + translationY) > 20) {
+        //   opacity.value = withTiming(0.8);
+        // }
+        // if (Math.abs(context.y + translationY) > 30) {
+        //   opacity.value = withTiming(0.7);
+        // }
+        // if (Math.abs(context.y + translationY) > 40) {
+        //   opacity.value = withTiming(0.6);
+        // }
+        // if (Math.abs(context.y + translationY) > 60) {
+        //   opacity.value = withTiming(0.3);
+        // }
+        // console.log('translationY: ', translationY);
+        // console.log('context.y: ', context.y);
+        if (!(Math.abs(context.y + translationY) > 200)) {
+          mBottom.value = context.y + translationY;
+          y.value = context.y + translationY;
+        }
+      }
+    },
+    onEnd() {
+      if (y.value > 0) {
+        y.value = 0;
+        console.log('pulling down: ');
+      } else {
+        console.log('pulling up: ');
       }
     },
   });
@@ -91,22 +125,26 @@ const ProfileScreen = ({ navigation }: Props) => {
   // newProfileImage.jpg
   return (
     <View style={styles.safeArea}>
-      <PanGestureHandler onGestureEvent={gestureHandler}>
-        <Animated.View style={[styles.container, animatedStyle]}>
-          <View style={styles.profileInfo}>
-            <Image
-              source={require('../../Assets/Images/profile-img.jpeg')}
-              width={50}
-              height={50}
-              style={[styles.profileImage]}
-            />
-            <Header />
-            <NumberContainer />
-            <About />
-            <ButtonSection />
-          </View>
-        </Animated.View>
-      </PanGestureHandler>
+      <ImageBackground
+        source={require('../../Assets/Images/gtr.jpg')}
+        // source={require('../../Assets/Images/profile-img.jpeg')}
+        width={50}
+        height={50}
+      >
+        <PanGestureHandler onGestureEvent={gestureHandler}>
+          <Animated.View style={animatedStyle}>
+            <View style={styles.container}>
+              <Header />
+              <NumberContainer />
+              <About />
+              <ButtonSection />
+            </View>
+          </Animated.View>
+        </PanGestureHandler>
+        <View style={[styles.container, { height: 100 }]}>
+          <Stories />
+        </View>
+      </ImageBackground>
       <ProfileMaterialTabStack />
     </View>
   );
@@ -116,10 +154,7 @@ export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'white',
+    width: '100%',
   },
 
   safeArea: {
@@ -131,8 +166,6 @@ const styles = StyleSheet.create({
   },
   profileImage: {
     width: '100%',
-    height: '100%',
     position: 'absolute',
-    resizeMode: 'cover',
   },
 });

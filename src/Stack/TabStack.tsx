@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ExploreStack from './ExploreStack';
 import HomeStack from './HomeStack';
 import ProfileStack from './ProfileStack';
@@ -30,7 +30,7 @@ const TabStack = () => {
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? 'home' : 'home-outline'}
-              size={20}
+              size={focused ? 25 : 20}
               color={focused ? '#ff4444' : 'white'}
             />
           ),
@@ -44,7 +44,7 @@ const TabStack = () => {
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? 'md-search-sharp' : 'md-search-outline'}
-              size={20}
+              size={focused ? 25 : 20}
               color={focused ? '#ff4444' : 'white'}
             />
           ),
@@ -57,7 +57,7 @@ const TabStack = () => {
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
               name={focused ? 'movie' : 'movie-open-outline'}
-              size={20}
+              size={focused ? 25 : 20}
               color={focused ? '#ff4444' : 'white'}
             />
           ),
@@ -71,13 +71,13 @@ const TabStack = () => {
             focused ? (
               <Entypo
                 name={'shopping-bag'}
-                size={20}
+                size={focused ? 25 : 20}
                 color={focused ? '#ff4444' : 'white'}
               />
             ) : (
               <Feather
                 name={'shopping-bag'}
-                size={20}
+                size={focused ? 25 : 20}
                 color={focused ? '#ff4444' : 'white'}
               />
             ),
@@ -93,12 +93,12 @@ const TabStack = () => {
               width={10}
               height={10}
               style={{
-                width: 25,
-                height: 25,
-                borderRadius: 100,
-                resizeMode: 'contain',
+                width: 26,
+                height: 26,
+                borderRadius: 1,
                 borderWidth: 1,
                 borderColor: focused ? 'red' : 'transparent',
+                resizeMode: 'contain',
               }}
             />
           ),
